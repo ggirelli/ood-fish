@@ -1,3 +1,5 @@
+// Based on code by Dr. Erik Wernersson
+
 #include <assert.h>
 #include <math.h>
 #include <stdlib.h>

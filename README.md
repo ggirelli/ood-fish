@@ -211,7 +211,7 @@ optional arguments:
 
 ### 8. Calculate hdfe
 
-To calculate the hetero-dimerization free energy (hdfe) of every pair of filtered barcode candidate, use the `dfeCalc` script.
+To calculate the hetero-dimerization free energy (hdfe) of every pair of filtered barcode candidate, use the `dfeCalc` script (based on code by Dr. Erik Wernersson).
 
 ```
 usage: dfeCalc [-h] -i input -o output -m mode [-l seqLen][-v]
