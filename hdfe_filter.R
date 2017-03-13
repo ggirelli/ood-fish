@@ -34,7 +34,7 @@ parser = add_argument(parser, arg = "--out",
 	default = "hdfe_filtered.dat")
 parser = add_argument(parser, arg = "--pmc",
 	help = "Output PMC file name.",
-	default = "hdfe_filtered_graph.dat")
+	default = "hdfe_filtered_graph.txt")
 
 parser = add_argument(parser, arg = "--ht",
 	help = "Homology threshold (positive).",
