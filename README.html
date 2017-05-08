@@ -723,14 +723,10 @@ pre {
 }
 </style><title>README</title></head><body><article class="markdown-body"><h1>
 <a id="user-content-bcsuite" class="anchor" href="#bcsuite" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>BCSuite</h1>
-
 <p>BCSuite contains a series of scripts, that constitute a DNA BarCode filter/design pipeline.</p>
-
 <p>This document explains in detail the current pipeline for barcode filter/design. The barcodes are selected based on three features: reference genome homology, self-dimerization free energy, and hetero-dimerization free energy.</p>
-
 <h2>
 <a id="user-content-pipeline" class="anchor" href="#pipeline" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Pipeline</h2>
-
 <ol>
 <li>Sequence generation.</li>
 <li>
@@ -744,88 +740,66 @@ pre {
 <li>Filter based on hdfe.</li>
 <li>Select barcode set with <a href="https://www.cs.purdue.edu/homes/dgleich/codes/maxcliques/README.html">PMC algorithm</a>.</li>
 </ol>
-
 <h3>
 <a id="user-content-1-sequence-generation" class="anchor" href="#1-sequence-generation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>1. Sequence generation</h3>
-
 <p>Of course, we need to produce a set of barcode candidate to be filtered and properly selected. This set can be generated in a variety of ways. One example, would be selecting all the 20 characters long substring of a set of 25-mers.</p>
-
 <p>Specifically, Xu et al. published a list of 240,000 25-mers, that can be used to generate a list of 1440000 20-mers.</p>
-
 <h3>
 <a id="user-content-2-blat" class="anchor" href="#2-blat" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. <a href="https://genome.ucsc.edu/cgi-bin/hgBlat?command=start">BLAT</a>
 </h3>
-
 <p>Depending on the application, it might be important for the barcodes to be genome orthogonal, i.e., being absent from the genome. In other words, the homology between a barcode and the genome should be lower than a given threshold (e.g., 60%). This can be achieved using BLAT to align each barcode to the reference genome, and then analyze the output.</p>
-
 <p>Specifically, if the barcode is short (i.e., ~20 nt), the following parameters should be used:</p>
-
 <pre><code>echo -e "&gt; mer_XXXX\\nACTAG....ACTG" | blat -tileSize=6 -stepSize=1
 -minMatch=1 -oneOff=1 -minScore=0 -minIdentity=0 -maxGap=0 -repMatch=131071
 -noHead list.fa stdin &gt; mer_xxxx.psl
 </code></pre>
-
 <ul>
 <li>
 <strong>input</strong>: BLAT input should be a fasta-like string, containing the header and the sequence for a single barcode.</li>
 <li>
-<strong>tileSize</strong>: </li>
+<strong>tileSize</strong>: size of match that triggers an alignment. Default is 11 for DNA, usually set between 8 an 12.</li>
 <li>
-<strong>stepSize</strong>: </li>
+<strong>stepSize</strong>: spacing between tiles. Default is tileSize.</li>
 <li>
-<strong>minMatch</strong>: </li>
+<strong>minMatch</strong>: number of tile matches. usually set from 2 to 4. Default is 2 for nucleotide.</li>
 <li>
-<strong>oneOff</strong>: </li>
+<strong>oneOff</strong>: if set to 1, this allows one mismatch in tile and still triggers an alignment. Default is 0.</li>
 <li>
-<strong>minScore</strong>: </li>
+<strong>minScore</strong>: sets minimum score. The matches minus the mismatches minus a gap penalty. Default is 30.</li>
 <li>
-<strong>minIdentity</strong>: </li>
+<strong>minIdentity</strong>: sets minimum identity in percent. Default is 90 for nucleotide seraches.</li>
 <li>
-<strong>maxGap</strong>: </li>
+<strong>maxGap</strong>: size of maximum gap between tiles in a clump. Usually set from 0 to 3. Default is 2. Only relevant for minMatch &gt; 1.</li>
 <li>
-<strong>repMatch</strong>: </li>
+<strong>repMatch</strong>: number of repetitions of a tile allowed before it is marked as overused. Typically is 256 for tileSize 12, 1024 for tileSize 11, 4096 for tileSize 10... Default is 1024.Also affected by stepSize: when stepSize is halved, repMatch is doubled to compensate.</li>
 <li>
-<strong>noHead</strong>: </li>
+<strong>noHead</strong>: remove header from the output.</li>
 <li>
-<strong>list.fa</strong>: </li>
+<strong>list.fa</strong>: reference genome.</li>
 <li>
-<strong>stdin</strong>: </li>
+<strong>stdin</strong>: query (from stdin).</li>
 <li>
 <strong>output</strong>: the output will be a PSL file [<a href="http://www.ensembl.org/info/website/upload/psl.html">PSL format definition</a>].</li>
 </ul>
-
 <h3>
 <a id="user-content-3-merge" class="anchor" href="#3-merge" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. Merge</h3>
-
 <p>To convert the output of BLAT in a more readable format (here addressed as <em>recap</em>), we first need to merge all the single barcode PSL files into a single file.</p>
-
 <p>Usually, this can be easily achieved with a simple command line:</p>
-
 <pre><code>cat psl/* &gt; merged_psl.psl
 </code></pre>
-
 <p>But, when the number of single barcode PSL file is too large, it is necessary to use the <code>psl_merge.sh</code>. By going in the folder containing the PSL files, just run:</p>
-
 <pre><code>ls | xargs -n 1000 -P 1 psl_merge.sh
 </code></pre>
-
 <p>This will generate the <code>../merged_psl.psl</code> file.</p>
-
 <h3>
 <a id="user-content-4-split" class="anchor" href="#4-split" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>4. Split</h3>
-
 <p>Depending on the amount of available RAM on your machine, it might be difficult to operate on the <code>merged_psl.psl</code> file when many barcodes are being analyzed at the same time. We suggest then to split the file into smaller chunks using the following command line:</p>
-
 <pre><code>split -l 2GB  merged_psl.psl split/psl.
 </code></pre>
-
 <p>This command will split the <code>merged_psl.psl</code> file into 2GB-sized chunks of name <code>psl.aa</code>, <code>psl.ab</code>,... in the <code>split/</code> folder.</p>
-
 <h3>
 <a id="user-content-5-recap" class="anchor" href="#5-recap" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>5. Recap</h3>
-
 <p>The <em>recap</em> format is useful to understand the output of the BLAT tool. Specifically, it contains one barcode (sequence) per row with the following columns:</p>
-
 <ul>
 <li>
 <strong>i</strong>: barcode ID number.</li>
@@ -840,9 +814,7 @@ pre {
 <li>
 <strong>maxHomology</strong>: highest homology with a genomic locus (highest X with <code>hX != 0</code>).</li>
 </ul>
-
 <p>The script that converts the merged PSL file into the <em>recap</em> format is called <code>recap_blat.R</code>.</p>
-
 <pre><code>usage: recap_blat.R [--help] seq_dir psl_dir out_dir
        [--seq SEQ] [--psl PSL] [--out OUT] [--nst NST]
        [--ncores NCORES] [--suff SUFF]
@@ -865,15 +837,12 @@ optional arguments:
   --ncores NCORES   Number of cores for parallelization. [default: 30]
   --suff SUFF       Output suffix. [default: ]
 </code></pre>
-
 <h5>
 <a id="user-content-recap-after-splitting" class="anchor" href="#recap-after-splitting" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Recap after splitting</h5>
-
 <p>If the split step (4) was performed, the <code>recap_blat.R</code> script function should be run on every split PSL file. This can be easily achieved by running the <code>recap_split.sh</code> script.</p>
-
 <pre><code>usage: recap_split.sh -i psl_dir -o out_dir -s seq_dir
        [-f seq_file][-t threads][-p path]
-
+ 
 Run the recap_blat.R script for every split PSL file
 in the specified psl (-i) directory.
 
@@ -887,9 +856,7 @@ Optional arguments:
  -t threads    Number of threads for parallelization.
  -p path Path  to recap_blat.R script. Default './recap_blat.R'
 </code></pre>
-
 <p>Then, merge the converted split recap tables with the <code>recap_merge.R</code> script.</p>
-
 <pre><code>usage: recap_merge.R [--help] recap_dir out_dir [--out OUT]
 
 Merge BLAT recaps.
@@ -904,12 +871,9 @@ flags:
 optional arguments:
   -o, --out OUT     Output file name. [default: merged_table.tsv]
 </code></pre>
-
 <h3>
 <a id="user-content-6-calculate-sdfe" class="anchor" href="#6-calculate-sdfe" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>6. Calculate sdfe</h3>
-
 <p>If needed, it is also possible to add a column with the calculated self-dimerization free energy (sdfe) to the recap table, using the <code>sdfe_calc.R</code> script.</p>
-
 <pre><code>usage: sdfe_calc.R [--help] rec_dir out_dir
        [--rec REC] [--out OUT] [--ncores NCORES] [--suff SUFF]
 
@@ -928,12 +892,9 @@ optional arguments:
   -n, --ncores NCORES   Number of cores for parallelization. [default: 30]
   -s, --suff SUFF       Output suffix. [default: ]
 </code></pre>
-
 <h3>
 <a id="user-content-7-filter-maxhomology--sdfe" class="anchor" href="#7-filter-maxhomology--sdfe" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>7. Filter (maxHomology &amp; sdfe)</h3>
-
 <p>Then, the recap table with sdfe column should be filtered based on sdfe and maxHomology with the <code>sdfe_filter.R</code> script. Use the output of the previous step (6) as the input (fin). The default SDFE threshold is set at -5 kcal/mol while the maxHomology at 75% of the sequence.</p>
-
 <pre><code>usage: sdfe_filter.R [--help] in_dir fin out_dir
        [--out OUT] [--homo_thr HOMO_THR] [--sdfe_thr SDFE_THR] [--ncores NCORES] [--seqlib SEQLIB]
 
@@ -958,12 +919,9 @@ optional arguments:
   --sl SL         Path to seq_lib.R
                   [default: ./seq_lib.R]
 </code></pre>
-
 <h3>
 <a id="user-content-8-calculate-hdfe" class="anchor" href="#8-calculate-hdfe" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>8. Calculate hdfe</h3>
-
-<p>To calculate the hetero-dimerization free energy (hdfe) of every pair of filtered barcode candidate, use the <code>dfeCalc</code> script.</p>
-
+<p>To calculate the hetero-dimerization free energy (hdfe) of every pair of filtered barcode candidate, use the <code>dfeCalc</code> script (based on code by Dr. Erik Wernersson).</p>
 <pre><code>usage: dfeCalc [-h] -i input -o output -m mode [-l seqLen][-v]
 
 Mandatory arguments:
@@ -977,25 +935,18 @@ Optional arguments:
 -h  Show this help page
 
 </code></pre>
-
 <p>Using the <code>-v</code> option to trigger verbose mode and have more details on the free energy calculations. The three different modes are:</p>
-
 <ol>
 <li>Calculate the HDFE of every oligo and the reverse of every other.</li>
 <li>Calculate the HDFE of every oligo and the reverse complement of every other.</li>
 <li>Keep the minimum (strongest bind) HDFE from the other two modes.</li>
 </ol>
-
 <p>The script <strong>input file</strong> is a oneline fasta file with the sequences from the filtered table generated at step 7. This file can be produced using the following command line:</p>
-
 <pre><code>cat merged_table.filtered.sdfe.tsv | cut -f 4 | sed 1d | tr -d "\n" &gt; sequence.filtered.oneline.fa
 </code></pre>
-
 <h3>
 <a id="user-content-9-filter-hdfe" class="anchor" href="#9-filter-hdfe" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>9. Filter (hdfe)</h3>
-
 <p>Filter the HDFE table using the <code>hdfe_filter.R</code> script. The default threshold is set at -9 kcal/mol.</p>
-
 <pre><code>usage: hdfe_filter.R [--help] in_dir out_dir
        [--fin FIN][--out OUT][--pmc PMC][--ht HT]
 
@@ -1018,15 +969,11 @@ optional arguments:
   --ht HT           Homology threshold (positive).
                     [default: -9]
 </code></pre>
-
 <h3>
 <a id="user-content-10-select-barcode" class="anchor" href="#10-select-barcode" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>10. Select barcode</h3>
-
 <p>Finally, select a set of compatible barcodes with the <a href="https://www.cs.purdue.edu/homes/dgleich/codes/maxcliques/README.html"><code>pmc</code> algorithm</a>.</p>
-
 <pre><code>./pmc -f hdfe_filtered_graph.dat -t ncores &gt; pmc.log
 </code></pre>
-
 <pre><code>Usage: ./pmc -a alg -f graphfile -t threads -o ordering -h heu_strat -u upper_bound -l lower_bound -r reduce_wait_time -w time_limit 
   -a algorithm                 : Algorithm for solving MAX-CLIQUE: 0 = full, 1 = no neighborhood cores, 2 = only basic k-core pruning steps  
   -f graph file                : Input GRAPH file for computing the Maximum Clique (matrix market format or simple edge list). 

@@ -37,17 +37,17 @@ echo -e "> mer_XXXX\\nACTAG....ACTG" | blat -tileSize=6 -stepSize=1
 ```
 
 * **input**: BLAT input should be a fasta-like string, containing the header and the sequence for a single barcode.
-* **tileSize**: 
-* **stepSize**: 
-* **minMatch**: 
-* **oneOff**: 
-* **minScore**: 
-* **minIdentity**: 
-* **maxGap**: 
-* **repMatch**: 
-* **noHead**: 
-* **list.fa**: 
-* **stdin**: 
+* **tileSize**: size of match that triggers an alignment. Default is 11 for DNA, usually set between 8 an 12.
+* **stepSize**: spacing between tiles. Default is tileSize.
+* **minMatch**: number of tile matches. usually set from 2 to 4. Default is 2 for nucleotide.
+* **oneOff**: if set to 1, this allows one mismatch in tile and still triggers an alignment. Default is 0.
+* **minScore**: sets minimum score. The matches minus the mismatches minus a gap penalty. Default is 30.
+* **minIdentity**: sets minimum identity in percent. Default is 90 for nucleotide seraches.
+* **maxGap**: size of maximum gap between tiles in a clump. Usually set from 0 to 3. Default is 2. Only relevant for minMatch > 1.
+* **repMatch**: number of repetitions of a tile allowed before it is marked as overused. Typically is 256 for tileSize 12, 1024 for tileSize 11, 4096 for tileSize 10... Default is 1024.Also affected by stepSize: when stepSize is halved, repMatch is doubled to compensate.
+* **noHead**: remove header from the output.
+* **list.fa**: reference genome.
+* **stdin**: query (from stdin).
 * **output**: the output will be a PSL file [[PSL format definition](http://www.ensembl.org/info/website/upload/psl.html)].
 
 ### 3. Merge
