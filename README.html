@@ -757,21 +757,31 @@ pre {
 <li>
 <strong>input</strong>: BLAT input should be a fasta-like string, containing the header and the sequence for a single barcode.</li>
 <li>
-<strong>tileSize</strong>: size of match that triggers an alignment. Default is 11 for DNA, usually set between 8 an 12.</li>
+<strong>tileSize</strong>: size of match that triggers an alignment.<br>
+Default is 11 for DNA, usually set between 8 an 12.</li>
 <li>
-<strong>stepSize</strong>: spacing between tiles. Default is tileSize.</li>
+<strong>stepSize</strong>: spacing between tiles.<br>
+Default is tileSize.</li>
 <li>
-<strong>minMatch</strong>: number of tile matches. usually set from 2 to 4. Default is 2 for nucleotide.</li>
+<strong>minMatch</strong>: number of tile matches. Usually set from 2 to 4.<br>
+Default is 2 for nucleotide.</li>
 <li>
-<strong>oneOff</strong>: if set to 1, this allows one mismatch in tile and still triggers an alignment. Default is 0.</li>
+<strong>oneOff</strong>: if set to 1, this allows one mismatch in tile and still triggers an alignment.<br>
+Default is 0.</li>
 <li>
-<strong>minScore</strong>: sets minimum score. The matches minus the mismatches minus a gap penalty. Default is 30.</li>
+<strong>minScore</strong>: sets minimum score.<br>
+The matches minus the mismatches minus a gap penalty.<br>
+Default is 30.</li>
 <li>
-<strong>minIdentity</strong>: sets minimum identity in percent. Default is 90 for nucleotide seraches.</li>
+<strong>minIdentity</strong>: sets minimum identity in percent.<br>
+Default is 90 for nucleotide seraches.</li>
 <li>
-<strong>maxGap</strong>: size of maximum gap between tiles in a clump. Usually set from 0 to 3. Default is 2. Only relevant for minMatch &gt; 1.</li>
+<strong>maxGap</strong>: size of maximum gap between tiles in a clump. Usually set from 0 to 3.<br>
+Default is 2. Only relevant for minMatch &gt; 1.</li>
 <li>
-<strong>repMatch</strong>: number of repetitions of a tile allowed before it is marked as overused. Typically is 256 for tileSize 12, 1024 for tileSize 11, 4096 for tileSize 10... Default is 1024.Also affected by stepSize: when stepSize is halved, repMatch is doubled to compensate.</li>
+<strong>repMatch</strong>: number of repetitions of a tile allowed before it is marked as overused.<br>
+Typically is 256 for tileSize 12, 1024 for tileSize 11, 4096 for tileSize 10...<br>
+Default is 1024. Also affected by stepSize: when stepSize is halved, repMatch is doubled to compensate.</li>
 <li>
 <strong>noHead</strong>: remove header from the output.</li>
 <li>
