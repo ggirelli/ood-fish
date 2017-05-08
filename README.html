@@ -751,7 +751,7 @@ pre {
 <p>Specifically, if the barcode is short (i.e., ~20 nt), the following parameters should be used:</p>
 <pre><code>echo -e "&gt; mer_XXXX\\nACTAG....ACTG" | blat -tileSize=6 -stepSize=1
 -minMatch=1 -oneOff=1 -minScore=0 -minIdentity=0 -maxGap=0 -repMatch=131071
--noHead list.fa stdin &gt; mer_xxxx.psl
+-noHead list.fa stdin mer_xxxx.psl
 </code></pre>
 <ul>
 <li>

@@ -33,7 +33,7 @@ Specifically, if the barcode is short (i.e., ~20 nt), the following parameters s
 ```
 echo -e "> mer_XXXX\\nACTAG....ACTG" | blat -tileSize=6 -stepSize=1
 -minMatch=1 -oneOff=1 -minScore=0 -minIdentity=0 -maxGap=0 -repMatch=131071
--noHead list.fa stdin > mer_xxxx.psl
+-noHead list.fa stdin mer_xxxx.psl
 ```
 
 * **input**: BLAT input should be a fasta-like string, containing the header and the sequence for a single barcode.
