@@ -69,7 +69,7 @@ psl_colnames = c('matches', 'misMatches', 'repMatches', 'nCount', 'qNumInsert',
 	'qStart', 'qEnd', 'tName', 'tSize', 'tStart', 'tEnd', 'blockCount',
 	'blockSizes', 'qStarts', 'tStarts')
 
-if ("." != substr(suff, 1, 1)) suff = paste0(".", suff)
+if ("." != substr(suff, 1, 1) & 0 != nchar(suff)) suff = paste0(".", suff)
 
 # RUN ==========================================================================
 
