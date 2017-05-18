@@ -747,50 +747,10 @@ pre {
 <h3>
 <a id="user-content-2-blat" class="anchor" href="#2-blat" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>2. <a href="https://genome.ucsc.edu/cgi-bin/hgBlat?command=start">BLAT</a>
 </h3>
-<p>Depending on the application, it might be important for the barcodes to be genome orthogonal, i.e., being absent from the genome. In other words, the homology between a barcode and the genome should be lower than a given threshold (e.g., 60%). This can be achieved using BLAT to align each barcode to the reference genome, and then analyze the output.</p>
+<p>Depending on the application, it might be important for the barcodes to be genome orthogonal, i.e., being absent from the genome. In other words, the homology between a barcode and the genome should be lower than a given threshold (e.g., 60%). This can be achieved using BLAST to align each barcode to the reference genome, and then analyze the output.</p>
 <p>Specifically, if the barcode is short (i.e., ~20 nt), the following parameters should be used:</p>
-<pre><code>echo -e "&gt; mer_XXXX\\nACTAG....ACTG" | blat -tileSize=6 -stepSize=1
--minMatch=1 -oneOff=1 -minScore=0 -minIdentity=0 -maxGap=0 -repMatch=131071
--noHead list.fa stdin mer_xxxx.psl
+<pre><code>blastn -query input.fa -db refDB -word_size 6 -evalue 10000 -penalty -2 -reward 1 -task 'blastn' -outfmt 4 -out blast_output.txt -num_threads X
 </code></pre>
-<ul>
-<li>
-<strong>input</strong>: BLAT input should be a fasta-like string, containing the header and the sequence for a single barcode.</li>
-<li>
-<strong>tileSize</strong>: size of match that triggers an alignment.<br>
-Default is 11 for DNA, usually set between 8 an 12.</li>
-<li>
-<strong>stepSize</strong>: spacing between tiles.<br>
-Default is tileSize.</li>
-<li>
-<strong>minMatch</strong>: number of tile matches. Usually set from 2 to 4.<br>
-Default is 2 for nucleotide.</li>
-<li>
-<strong>oneOff</strong>: if set to 1, this allows one mismatch in tile and still triggers an alignment.<br>
-Default is 0.</li>
-<li>
-<strong>minScore</strong>: sets minimum score.<br>
-The matches minus the mismatches minus a gap penalty.<br>
-Default is 30.</li>
-<li>
-<strong>minIdentity</strong>: sets minimum identity in percent.<br>
-Default is 90 for nucleotide seraches.</li>
-<li>
-<strong>maxGap</strong>: size of maximum gap between tiles in a clump. Usually set from 0 to 3.<br>
-Default is 2. Only relevant for minMatch &gt; 1.</li>
-<li>
-<strong>repMatch</strong>: number of repetitions of a tile allowed before it is marked as overused.<br>
-Typically is 256 for tileSize 12, 1024 for tileSize 11, 4096 for tileSize 10...<br>
-Default is 1024. Also affected by stepSize: when stepSize is halved, repMatch is doubled to compensate.</li>
-<li>
-<strong>noHead</strong>: remove header from the output.</li>
-<li>
-<strong>list.fa</strong>: reference genome.</li>
-<li>
-<strong>stdin</strong>: query (from stdin).</li>
-<li>
-<strong>output</strong>: the output will be a PSL file [<a href="http://www.ensembl.org/info/website/upload/psl.html">PSL format definition</a>].</li>
-</ul>
 <h3>
 <a id="user-content-3-merge" class="anchor" href="#3-merge" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>3. Merge</h3>
 <p>To convert the output of BLAT in a more readable format (here addressed as <em>recap</em>), we first need to merge all the single barcode PSL files into a single file.</p>

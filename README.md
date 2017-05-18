@@ -26,39 +26,13 @@ Specifically, Xu et al. published a list of 240,000 25-mers, that can be used to
 
 ### 2. [BLAT](https://genome.ucsc.edu/cgi-bin/hgBlat?command=start)
 
-Depending on the application, it might be important for the barcodes to be genome orthogonal, i.e., being absent from the genome. In other words, the homology between a barcode and the genome should be lower than a given threshold (e.g., 60%). This can be achieved using BLAT to align each barcode to the reference genome, and then analyze the output.
+Depending on the application, it might be important for the barcodes to be genome orthogonal, i.e., being absent from the genome. In other words, the homology between a barcode and the genome should be lower than a given threshold (e.g., 60%). This can be achieved using BLAST to align each barcode to the reference genome, and then analyze the output.
 
 Specifically, if the barcode is short (i.e., ~20 nt), the following parameters should be used:
 
 ```
-echo -e "> mer_XXXX\\nACTAG....ACTG" | blat -tileSize=6 -stepSize=1
--minMatch=1 -oneOff=1 -minScore=0 -minIdentity=0 -maxGap=0 -repMatch=131071
--noHead list.fa stdin mer_xxxx.psl
+blastn -query input.fa -db refDB -word_size 6 -evalue 10000 -penalty -2 -reward 1 -task 'blastn' -outfmt 4 -out blast_output.txt -num_threads X
 ```
-
-* **input**: BLAT input should be a fasta-like string, containing the header and the sequence for a single barcode.
-* **tileSize**: size of match that triggers an alignment.  
-Default is 11 for DNA, usually set between 8 an 12.
-* **stepSize**: spacing between tiles.  
-Default is tileSize.
-* **minMatch**: number of tile matches. Usually set from 2 to 4.  
-Default is 2 for nucleotide.
-* **oneOff**: if set to 1, this allows one mismatch in tile and still triggers an alignment.  
-Default is 0.
-* **minScore**: sets minimum score.  
-The matches minus the mismatches minus a gap penalty.  
-Default is 30.
-* **minIdentity**: sets minimum identity in percent.  
-Default is 90 for nucleotide seraches.
-* **maxGap**: size of maximum gap between tiles in a clump. Usually set from 0 to 3.  
-Default is 2. Only relevant for minMatch > 1.
-* **repMatch**: number of repetitions of a tile allowed before it is marked as overused.  
-Typically is 256 for tileSize 12, 1024 for tileSize 11, 4096 for tileSize 10...  
-Default is 1024. Also affected by stepSize: when stepSize is halved, repMatch is doubled to compensate.
-* **noHead**: remove header from the output.
-* **list.fa**: reference genome.
-* **stdin**: query (from stdin).
-* **output**: the output will be a PSL file [[PSL format definition](http://www.ensembl.org/info/website/upload/psl.html)].
 
 ### 3. Merge
 
