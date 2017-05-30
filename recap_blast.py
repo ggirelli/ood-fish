@@ -100,9 +100,13 @@ with open(inFile) as f:
 
 			# Start new oligomer with default counts
 
+		# Skip if it contains gaps
+		if not 0 == int(row[5]):
+			next
+
 		# Update oligomer counts otherwise
-		# Read line, subtract mismatches and gaps from match length
-		score = int(row[3]) - int(row[4]) - int(row[5])
+		# Read line, subtract mismatches from match length
+		score = int(row[3]) - int(row[4])
 		if score > length:
 			print("!!!ERROR!!! Score [%i] is too big.\n%s" %(score, line))
 		cur_counts[score - 1] += 1
