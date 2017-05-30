@@ -102,7 +102,7 @@ with open(inFile) as f:
 
 		# Skip if it contains gaps
 		if not 0 == int(row[5]):
-			next
+			continue
 
 		# Update oligomer counts otherwise
 		# Read line, subtract mismatches from match length
