@@ -60,9 +60,15 @@ Default is 1024. Also affected by stepSize: when stepSize is halved, repMatch is
 * **stdin**: query (from stdin).
 * **output**: the output will be a PSL file [[PSL format definition](http://www.ensembl.org/info/website/upload/psl.html)].
 
-### 3. Merge
+Or with BLAST using the following parameters.
 
-To convert the output of BLAT in a more readable format (here addressed as *recap*), we first need to merge all the single barcode PSL files into a single file.
+```
+blastn -query input.fa -db refDB -word_size 6 -evalue 10000 -penalty -2 -reward 1 -task 'blastn' -outfmt 4 -out blast_output.txt -num_threads X
+```
+
+### 3. Merge (only for BLAT)
+
+To convert the output of **BLAT** in a more readable format (here addressed as *recap*), we first need to merge all the single barcode PSL files into a single file.
 
 Usually, this can be easily achieved with a simple command line:
 
@@ -78,7 +84,7 @@ ls | xargs -n 1000 -P 1 psl_merge.sh
 
 This will generate the `../merged_psl.psl` file.
 
-### 4. Split
+### 4. Split (only for BLAT)
 
 Depending on the amount of available RAM on your machine, it might be difficult to operate on the `merged_psl.psl` file when many barcodes are being analyzed at the same time. We suggest then to split the file into smaller chunks using the following command line:
 
@@ -125,7 +131,13 @@ optional arguments:
   --suff SUFF       Output suffix. [default: ]
 ```
 
-##### Recap after splitting
+Otherwise, to convert the output of BLAST (when using `-outfmt 6`), use the following script:
+
+```
+usage: recap_blast.R
+```
+
+##### Recap after splitting (only for BLAT)
 
 If the split step (4) was performed, the `recap_blat.R` script function should be run on every split PSL file. This can be easily achieved by running the `recap_split.sh` script.
 
