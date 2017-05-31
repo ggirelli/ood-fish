@@ -18,7 +18,7 @@ suppressMessages(library(data.table))
 library(parallel)
 library(readr)
 
-source('/home/gire/Desktop/BiCro/Code/repo/00_gabriele/Sequencing/seq_lib.R')
+source('../seq-lib-gg/seq_lib.R')
 
 # PARAMS =======================================================================
 
