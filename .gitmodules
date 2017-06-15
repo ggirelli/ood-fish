@@ -1,0 +1,3 @@
+[submodule "seq-lib-gg"]
+	path = seq-lib-gg
+	url = git@github.com:ggirelli/seq-lib-gg.git

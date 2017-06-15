@@ -13,12 +13,19 @@
 
 # DEPENDENCIES =================================================================
 
-library(argparser)
+suppressMessages(library(argparser))
 suppressMessages(library(data.table))
-library(parallel)
-library(readr)
+suppressMessages(library(parallel))
+suppressMessages(library(readr))
 
-source('../seq-lib-gg/seq_lib.R')
+cmd_args <- commandArgs(trailingOnly = FALSE)
+cmd_args_trailing <- commandArgs(trailingOnly = TRUE)
+leading_idx <- seq.int(from = 1,
+	length.out = length(cmd_args) - length(cmd_args_trailing))
+cmd_args <- cmd_args[leading_idx]
+dir <- gsub("^(?:--file=(.*)|.*)$", "\\1", cmd_args)
+dir <- dirname(tail(dir[dir != ""], 1))
+suppressMessages(source(paste0(dir, '/lib/seq-lib-gg/seq_lib.R')))
 
 # PARAMS =======================================================================
 
@@ -54,7 +61,7 @@ attach(p['' != names(p)])
 
 # Calculate self dimerization energy for every query in the 
 cat(paste0(' · Reading recap table...\n'))
-t = read_delim(paste0(rec_dir, rec), '\t')
+t = suppressMessages(read_delim(paste0(rec_dir, '/', rec), '\t', col_names = T))
 
 # Initialize dimerization suite and start calculation
 ds = dimerization_suite(ncores = 1)
@@ -70,7 +77,7 @@ t$sdfe = l
 
 # Write output
 cat(paste0(' · Writing output...\n'))
-write.table(t, paste0(out_dir, out, suff),
+write.table(t, paste0(out_dir, '/', out, suff),
 	quote = F, row.names = F, col.names = T, sep = '\t')
 
 cat(' ~ END ~ ')
