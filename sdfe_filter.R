@@ -50,7 +50,7 @@ attach(p["" != names(p)])
 st = -abs(st)
 
 # Print settings
-cat(paste0("Homology threshold: ", ht, "%\n"))
+cat(paste0("Homology threshold: ", ht*100, "%\n"))
 cat(paste0("SDFE threshold: ", st, " kcal/mol\n"))
 
 # FUNCTIONS ====================================================================
@@ -69,7 +69,7 @@ out_dir = add_trailing_slash(out_dir)
 
 # Read input table
 cat(" · Reading recap table with SDFE...\n")
-t = read_delim(paste0(in_dir, fin), "\t")
+t = suppressMessages(read_delim(paste0(in_dir, fin), "\t"))
 
 # Calculate threshold
 thr = t$k[1] * ht
