@@ -63,7 +63,7 @@ Default is 1024. Also affected by stepSize: when stepSize is halved, repMatch is
 Or with BLAST using the following parameters.
 
 ```
-blastn -query input.fa -db refDB -word_size 6 -evalue 10000 -penalty -2 -reward 1 -task 'blastn' -outfmt 4 -out blast_output.txt -num_threads X
+blastn -query input.fa -db refDB -word_size 6 -evalue 10000 -penalty -2 -reward 1 -task 'blastn' -outfmt 6 -out blast_output.txt -num_threads X
 ```
 
 ### 3. Merge (only for BLAT)
