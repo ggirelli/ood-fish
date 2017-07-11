@@ -111,6 +111,20 @@ with open(inFile) as f:
 			print("!!!ERROR!!! Score [%i] is too big.\n%s" %(score, line))
 		cur_counts[score - 1] += 1
 
+# Run last oligo
+print(cur_mer)
+# Check max homology
+cur_max = max([i for i in range(length) if not cur_counts[i] == 0]) + 1
+
+# Prepare output
+outlist = [cur_mer]
+outlist.extend(cur_counts)
+outlist.append(cur_max)
+
+# Append recap to outFile if this is not the first oligo
+outstring = "\t".join([str(e) for e in outlist]) + "\n"
+fout.write(outstring)
+
 # Close outFile pointer
 fout.close()
 
