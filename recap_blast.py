@@ -77,7 +77,7 @@ with open(inFile) as f:
 	for line in f:
 		row = line.strip().split(sep)
 
-		# Check if the previous oligomeris concluded
+		# Check if the previous oligomer is concluded
 		if not row[0] == cur_mer:
 			if not cur_mer == 0:
 				print(cur_mer)
