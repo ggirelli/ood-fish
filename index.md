@@ -12,5 +12,7 @@ The pipeline includes the following steps:
 
 ## Useful links
 
+* [Install](https://ggirelli.github.io/ood-fish/install)
+* [Usage](https://ggirelli.github.io/ood-fish/usage)
 * [Contributing Guidelines](https://ggirelli.github.io/ood-fish/contributing)
 * [Code of Conduct](https://ggirelli.github.io/ood-fish/code_of_conduct)
