@@ -4,4 +4,38 @@ title: "OOD-FISH Usage"
 
 # How to run OOD-FISH
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem ducimus veniam dolore maxime quos quia molestias facilis laudantium nemo, voluptates ab harum delectus. A dolorem suscipit necessitatibus doloremque repellat deserunt.
+## 1. Sequence generation
+
+...
+
+## 2. Align against reference genome of interest
+
+...
+
+### 2.a Using BLAT
+
+...
+
+### 2.b Using BLAST
+
+...
+
+## 3. Calculate Self-Dimerization Free Energy (SDFE)
+
+...
+
+## 4. Filter based on homology and SDFE
+
+...
+
+## 5. Calculate pair-wise Hetero-Dimerization Free Energy (HDFE)
+
+...
+
+## 6. Filter based on HDFE
+
+...
+
+## 7. Select largest set of compatible barcodes
+
+...
