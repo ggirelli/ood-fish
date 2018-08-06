@@ -39,7 +39,7 @@ More details on how to run **OOD-FISH** are available in the [documentation](htt
 Contributing
 ---
 
-We welcome any contributions to `ood-fish`. Please, refer to the [contribution guidelines]() if this is your first time contributing! Also, check out our [code of conduct]().
+We welcome any contributions to `ood-fish`. Please, refer to the [contribution guidelines](https://ggirelli.github.io/ood-fish/contributing) if this is your first time contributing! Also, check out our [code of conduct](https://ggirelli.github.io/ood-fish/code_of_conduct).
 
 License
 ---
