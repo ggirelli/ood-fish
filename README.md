@@ -29,6 +29,8 @@ for ( p in c("argparser", "data.table", "parallel", "readr") )
 gcc src/dfeCalc.c -o src/dfeCalc
 ```
 
+4. Install PMC algorithm following the instructions [here](https://github.com/ryanrossi/pmc#setup).
+
 Usage
 ---
 
