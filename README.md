@@ -15,10 +15,22 @@ git clone https://github.com/ggirelli/ood-fish/
 cd ood-fish
 ```
 
+2. Install R dependencies.
+
+```R
+for ( p in c("argparser", "data.table", "parallel", "readr") ) if ( !require(p, character.only = T) ) install.packages(p)
+```
+
+3. Compile if needed.
+
+```bash
+gcc src/dfeCalc.c -o src/dfeCalc
+```
+
 Usage
 ---
 
-...
+More details on how to run **OOD-FISH** are available in the [documentation](https://ggirelli.github.io/ood-fish/).
 
 Contributing
 ---
