@@ -3,7 +3,7 @@ OOD-FISH v0.0.2
 
 Orthogonal oligo Design for Fluorescence *In Situ* Hybridization (**OOD-FISH**) is a pipeline for the identification of oligonucleotide sequences that do not hybridize to a reference genome of interest. Such orthogonal oligonucleotides can easily be used as barcodes for PCR or similar protocols.
 
-Read the [documentation]() for more details.
+Read the [documentation](https://ggirelli.github.io/ood-fish/) for more details.
 
 Installation
 ---
