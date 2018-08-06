@@ -11,7 +11,7 @@ git clone https://github.com/ggirelli/ood-fish/
 cd ood-fish
 ```
 
-* Install R dependencies.
+* Install R dependencies by running the following in an R command line.
 
 ```R
 for ( p in c("argparser", "data.table", "parallel", "readr") )
