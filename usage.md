@@ -73,7 +73,7 @@ Still, depending on the amount of available RAM on your machine, it might be dif
 split -l 2GB  merged_psl.psl split/psl.
 ```
 
-**NOTE! `split` refers to the command available in the `GNU coreutils` package. This is usually the default on Linux systems, while on Mac systems it is most often the `BSD` version (not compatible with this workflow)!!!**
+**NOTE! `split` refers to the command available in the [`GNU coreutils`](https://www.gnu.org/software/coreutils/manual/html_node/split-invocation.html) package. This is usually the default on Linux systems, while on Mac systems it is most often the `BSD` version (not compatible with this workflow)!!!**
 
 This command will split the `merged_psl.psl` file into 2GB-sized chunks of name `psl.aa`, `psl.ab`,... in the `split/` folder.
 
