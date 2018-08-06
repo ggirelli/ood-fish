@@ -18,11 +18,13 @@ Information on the homology of each candidate against the reference genome of in
 
 ### 2.a Using BLAST
 
+First, run BLAST with the following parameters (optimized for barcode length of 20 nt):
+
 ```bash
 blastn -query input.fa -db refDB -word_size 6 -evalue 10000 -penalty -2 -reward 1 -task 'blastn' -outfmt 6 -out blast_output.txt -num_threads X
 ```
 
-Then, we convert the output of **BLAST** in a more readable format (here addressed as *recap*). The *recap* format is useful to understand the output of the BLAT tool. Specifically, it contains one barcode (sequence) per row with the following columns:
+Then, convert the output of **BLAST** in a more readable format (here addressed as *recap*). The *recap* format is useful to understand the output of the BLAT tool. Specifically, it contains one barcode (sequence) per row with the following columns:
 
 * **i**: barcode ID number.
 * **qName**: barcode ID name.
@@ -35,17 +37,19 @@ The script that converts the output of BLAST (when using `-outfmt 6`) into the *
 
 ### 2.b Using BLAT
 
+First, run BLAT with the following parameters (optimized for barcode length of 20 nt):
+
 ```bash
 blat -tileSize=6 -stepSize=1
 -minMatch=1 -oneOff=1 -minScore=0 -minIdentity=0 -maxGap=0 -repMatch=131071
 -noHead genome.fa input.fa blat_output.psl
 ```
 
-Then, we convert the output of **BLAT** into the *recap* format. The script that converts the merged PSL file into the *recap* format is called `recap_blat.R`. Run `recap_blat.R -h` for more details on how to run the script.
+Then, convert the output of **BLAT** into the *recap* format. The script that converts the merged PSL file into the *recap* format is called `recap_blat.R`. Run `recap_blat.R -h` for more details on how to run the script.
 
 #### BLAT caveats
 
-Differently from BLAST, BLAT is not parallelized by default. Parallelization can still be easily achieved by exploiting software like [GNU Parallel](https://www.gnu.org/software/parallel/) and feeding it one oligomer at a time (batch of two lines from the input fasta).
+Differently from BLA**S**T, BLAT is not parallelized by default. Parallelization can still be easily achieved by exploiting software like [GNU Parallel](https://www.gnu.org/software/parallel/) and feeding it one oligomer at a time (batch of two lines from the input fasta).
 
 In this case, to convert the output of BLAT into the *recap* format, we first need to merge all the single barcode PSL files into a single file.
 
