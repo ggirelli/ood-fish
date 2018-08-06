@@ -8,7 +8,7 @@ The pipeline includes the following steps:
 4. Filter candidates based on maximum homology and SDFE.
 5. Calculate pair-wise hetero-dimerization free energy (HDFE) of selected candidates.
 6. Filter based on HDFE.
-7. Select largest barcode set with [Parallel Maximum Clique (PMC) algorithm](https://www.cs.purdue.edu/homes/dgleich/codes/maxcliques/README.html).
+7. Select largest barcode set with [Parallel Maximum Clique (PMC) algorithm](https://github.com/ryanrossi/pmc).
 
 ## Useful links
 
