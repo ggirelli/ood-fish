@@ -18,7 +18,9 @@ cd ood-fish
 2. Install R dependencies.
 
 ```R
-for ( p in c("argparser", "data.table", "parallel", "readr") ) if ( !require(p, character.only = T) ) install.packages(p)
+for ( p in c("argparser", "data.table", "parallel", "readr") )
+    if ( !require(p, character.only = T) )
+        install.packages(p)
 ```
 
 3. Compile if needed.
