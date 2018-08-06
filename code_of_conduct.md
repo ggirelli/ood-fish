@@ -1,4 +1,6 @@
-# OOD-FISH Code of Conduct
+---
+title: OOD-FISH Code of Conduct
+---
 
 ## Our Pledge
 

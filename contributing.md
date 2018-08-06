@@ -1,3 +1,7 @@
+---
+title: "OOD-FISH Contributing Guidelines"
+---
+
 # Introduction
 
 Hi there, thank you for considering contributing to `OOD-FISH` to help us make our code a better version of itself!
