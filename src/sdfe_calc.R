@@ -25,7 +25,7 @@ leading_idx <- seq.int(from = 1,
 cmd_args <- cmd_args[leading_idx]
 dir <- gsub("^(?:--file=(.*)|.*)$", "\\1", cmd_args)
 dir <- dirname(tail(dir[dir != ""], 1))
-suppressMessages(source(paste0(dir, '/lib/seq-lib-gg/seq_lib.R')))
+suppressMessages(source(paste0(dir, '/../lib/seq-lib-gg/seq_lib.R')))
 
 # PARAMS =======================================================================
 

@@ -8,7 +8,12 @@ Read the [documentation](https://ggirelli.github.io/ood-fish/) for more details.
 Installation
 ---
 
-...
+1. Clone the git repository locally.
+
+```bash
+git clone https://github.com/ggirelli/ood-fish/
+cd ood-fish
+```
 
 Usage
 ---
