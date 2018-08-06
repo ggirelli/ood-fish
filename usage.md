@@ -16,15 +16,13 @@ Depending on the application, it might be important for the barcodes to be genom
 
 Information on the homology of each candidate against the reference genome of interest can be easily obtained running short-read aligners like [BLAT](http://genome.ucsc.edu/goldenPath/help/blatSpec.html) or [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs&DOC_TYPE=Download). OOD-FISH supports both tools.
 
-### 2.a Using BLAT
+### 2.a Using BLAST
 
 ```bash
-blat -tileSize=6 -stepSize=1
--minMatch=1 -oneOff=1 -minScore=0 -minIdentity=0 -maxGap=0 -repMatch=131071
--noHead genome.fa input.fa blat_output.psl
+blastn -query input.fa -db refDB -word_size 6 -evalue 10000 -penalty -2 -reward 1 -task 'blastn' -outfmt 6 -out blast_output.txt -num_threads X
 ```
 
-Then, we convert the output of **BLAT** in a more readable format (here addressed as *recap*). The *recap* format is useful to understand the output of the BLAT tool. Specifically, it contains one barcode (sequence) per row with the following columns:
+Then, we convert the output of **BLAST** in a more readable format (here addressed as *recap*). The *recap* format is useful to understand the output of the BLAT tool. Specifically, it contains one barcode (sequence) per row with the following columns:
 
 * **i**: barcode ID number.
 * **qName**: barcode ID name.
@@ -33,15 +31,49 @@ Then, we convert the output of **BLAT** in a more readable format (here addresse
 * **hX**: number of genomic loci with X homology with the barcode.
 * **maxHomology**: highest homology with a genomic locus (highest X with `hX != 0`).
 
-The script that converts the merged PSL file into the *recap* format is called `recap_blat.R`. Run `recap_blat.R -h` for more details on how to run the script.
+The script that converts the output of BLAST (when using `-outfmt 6`) into the *recap* format is called `recap_blast.R`. Run `recap_blast.R -h` for more details on how to run the script.
 
-### 2.b Using BLAST
+### 2.b Using BLAT
 
 ```bash
-blastn -query input.fa -db refDB -word_size 6 -evalue 10000 -penalty -2 -reward 1 -task 'blastn' -outfmt 6 -out blast_output.txt -num_threads X
+blat -tileSize=6 -stepSize=1
+-minMatch=1 -oneOff=1 -minScore=0 -minIdentity=0 -maxGap=0 -repMatch=131071
+-noHead genome.fa input.fa blat_output.psl
 ```
 
-Then, we convert the output of **BLAST** in a more readable format (here addressed as *recap*). The script that converts the output of BLAST (when using `-outfmt 6`) into the *recap* format is called `recap_blast.R`. Run `recap_blast.R -h` for more details on how to run the script.
+Then, we convert the output of **BLAT** into the *recap* format. The script that converts the merged PSL file into the *recap* format is called `recap_blat.R`. Run `recap_blat.R -h` for more details on how to run the script.
+
+#### BLAT caveats
+
+Differently from BLAST, BLAT is not parallelized by default. Parallelization can still be easily achieved by exploiting software like [GNU Parallel](https://www.gnu.org/software/parallel/) and feeding it one oligomer at a time (batch of two lines from the input fasta).
+
+In this case, to convert the output of BLAT into the *recap* format, we first need to merge all the single barcode PSL files into a single file.
+
+Usually, this can be easily achieved with a simple command line:
+
+```bash
+cat psl/* > merged_psl.psl
+```
+
+But, when the number of single barcode PSL file is too large, it is necessary to use the `psl_merge.sh`. First go in the folder containing the PSL files, then run:
+
+```bash
+ls | xargs -n 1000 -P 1 psl_merge.sh
+```
+
+This will generate the `../merged_psl.psl` file.
+
+Still, depending on the amount of available RAM on your machine, it might be difficult to operate on the `merged_psl.psl` file when many barcodes are being analyzed at the same time. We suggest then to split the file into smaller chunks using the following command line:
+
+```bash
+split -l 2GB  merged_psl.psl split/psl.
+```
+
+This command will split the `merged_psl.psl` file into 2GB-sized chunks of name `psl.aa`, `psl.ab`,... in the `split/` folder.
+
+If splitting was necessary, the `recap_blat.R` script function should be run on every split PSL file. This can be easily achieved by running the `recap_split.sh` script.
+
+Then, merge the converted split recap tables with the `recap_merge.R` script.
 
 ## 3. Calculate Self-Dimerization Free Energy (SDFE)
 
